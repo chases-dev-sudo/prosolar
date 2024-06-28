@@ -1,8 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'production', // or 'development' based on your environment
-  entry: './app.ts',
+  entry: './src/app.ts',
   module: {
     rules: [
       {
@@ -19,5 +18,7 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public'),
   },
+  mode: 'development',
 };
+
 
