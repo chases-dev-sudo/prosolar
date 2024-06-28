@@ -1,31 +1,3 @@
-import * as GeoTIFF from 'geotiff';
-
-interface GeoTiff {
-  width: number;
-  height: number;
-  rasters: Float32Array[];
-  bounds: Bounds;
-}
-
-interface Bounds {
-  minX: number;
-  minY: number;
-  maxX: number;
-  maxY: number;
-}
-
-interface SolarPanelConfig {
-  panelsCount: number;
-  yearlyEnergyDcKwh: number;
-  roofSegmentSummaries: {
-    pitchDegrees: number;
-    azimuthDegrees: number;
-    panelsCount: number;
-    yearlyEnergyDcKwh: number;
-    segmentIndex: number;
-  }[];
-}
-
 interface ApiResponse {
   name: string;
   center: { latitude: number; longitude: number };
@@ -61,14 +33,6 @@ interface ApiResponse {
     }[];
     solarPanelConfigs: SolarPanelConfig[];
   };
-}
-
-async function fetchConfig(): Promise<{ apiKey: string; address: string }> {
-  const response = await fetch('/config.json');
-  if (!response.ok) {
-    throw new Error(`Error fetching config: ${response.statusText}`);
-  }
-  return response.json();
 }
 
 async function fetchGeoTiffFromServer(apiKey: string, address: string): Promise<ApiResponse> {
@@ -127,10 +91,17 @@ function createImageUrl(data: ApiResponse): string {
   return 'https://dummyimage.com/600x400/000/fff';
 }
 
-async function displayGeoTiff() {
-  const { apiKey, address } = await fetchConfig();
-  const geoTiff = await fetchGeoTiffFromServer(apiKey, address);
-  displaySolarInfo(geoTiff);
+async function handleFormSubmit(event: Event) {
+  event.preventDefault();
+  const apiKey = (document.getElementById('api-key') as HTMLInputElement).value;
+  const address = (document.getElementById('address') as HTMLInputElement).value;
+
+  try {
+    const geoTiff = await fetchGeoTiffFromServer(apiKey, address);
+    displaySolarInfo(geoTiff);
+  } catch (error) {
+    console.error('Error fetching GeoTIFF data:', error);
+  }
 }
 
-document.addEventListener('DOMContentLoaded', displayGeoTiff);
+document.getElementById('solar-form')!.addEventListener('submit', handleFormSubmit);
