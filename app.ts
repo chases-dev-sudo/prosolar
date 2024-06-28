@@ -1,3 +1,5 @@
+import * as GeoTIFF from 'geotiff';
+
 interface GeoTiff {
   width: number;
   height: number;
@@ -50,7 +52,7 @@ interface ApiResponse {
         sunshineQuantiles: number[];
         groundAreaMeters2: number;
       };
-      center: { latitude: number; longitude: number };
+      center: { latitude: number; longitude; number };
       boundingBox: {
         sw: { latitude: number; longitude: number };
         ne: { latitude: number; longitude: number };
@@ -59,6 +61,14 @@ interface ApiResponse {
     }[];
     solarPanelConfigs: SolarPanelConfig[];
   };
+}
+
+async function fetchConfig(): Promise<{ apiKey: string; address: string }> {
+  const response = await fetch('/config.json');
+  if (!response.ok) {
+    throw new Error(`Error fetching config: ${response.statusText}`);
+  }
+  return response.json();
 }
 
 async function fetchGeoTiffFromServer(apiKey: string, address: string): Promise<ApiResponse> {
@@ -101,13 +111,20 @@ function displaySolarInfo(data: ApiResponse) {
   summaryElement.textContent = summary;
   container.appendChild(summaryElement);
 
-  // Assuming the image URL is part of the response, let's say as `imageUrl`
-  const imageUrl = "https://your-image-url.com"; // Replace this with the actual image URL from the response
+  const imageUrl = createImageUrl(data); // Function to create the image URL
   const linkElement = document.createElement('a');
   linkElement.href = imageUrl;
   linkElement.textContent = 'View Solar Panel Configuration Image';
   linkElement.target = '_blank';
   container.appendChild(linkElement);
+}
+
+function createImageUrl(data: ApiResponse): string {
+  // Process the GeoTIFF data and generate the image URL
+  // For demonstration purposes, this function will return a dummy URL
+  // In a real application, you would generate the image URL based on the data
+
+  return 'https://dummyimage.com/600x400/000/fff';
 }
 
 async function displayGeoTiff() {
