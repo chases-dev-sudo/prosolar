@@ -1,15 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "es6",
+    "target": "ES5",
+    "module": "commonjs",
+    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "lib": ["es2015", "dom"],
-    "moduleResolution": "node"
-  },
-  "include": ["app.ts", "custom.d.ts"]
+    "forceConsistentCasingInFileNames": true
+  }
 }
+
 
