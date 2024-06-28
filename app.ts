@@ -134,3 +134,4 @@ async function handleFormSubmit(event: Event) {
 
 document.getElementById('solar-form')!.addEventListener('submit', handleFormSubmit);
 
+
