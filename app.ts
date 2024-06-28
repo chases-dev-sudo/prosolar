@@ -52,7 +52,7 @@ interface ApiResponse {
         sunshineQuantiles: number[];
         groundAreaMeters2: number;
       };
-      center: { latitude: number; longitude; number };
+      center: { latitude: number; longitude: number };
       boundingBox: {
         sw: { latitude: number; longitude: number };
         ne: { latitude: number; longitude: number };
