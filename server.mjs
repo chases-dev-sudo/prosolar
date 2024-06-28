@@ -8,12 +8,9 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 app.post('/api/solar', async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).send('Method Not Allowed');
-  }
-
   try {
-    const { apiKey, address } = req.body;
+    const { address } = req.body;
+    const apiKey = process.env.API_KEY;
 
     console.log(`Received apiKey: ${apiKey}, address: ${address}`);
 
@@ -22,7 +19,6 @@ app.post('/api/solar', async (req, res) => {
       return res.status(400).send('Missing apiKey or address in the request body');
     }
 
-    // Get coordinates from address using a geocoding API (e.g., Google Geocoding API)
     const geocodingResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`);
     const geocodingData = await geocodingResponse.json();
 
@@ -37,7 +33,6 @@ app.post('/api/solar', async (req, res) => {
     const latitude = location.lat;
     const longitude = location.lng;
 
-    // Make the Google Solar API call with the coordinates and API key as a query parameter
     const solarApiUrl = `https://solar.googleapis.com/v1/buildingInsights:findClosest?location.latitude=${latitude}&location.longitude=${longitude}&requiredQuality=HIGH&key=${apiKey}`;
     const solarResponse = await fetch(solarApiUrl, {
       headers: {
