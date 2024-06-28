@@ -1,3 +1,31 @@
+import * as GeoTIFF from 'geotiff';
+
+interface GeoTiff {
+  width: number;
+  height: number;
+  rasters: Float32Array[];
+  bounds: Bounds;
+}
+
+interface Bounds {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+interface SolarPanelConfig {
+  panelsCount: number;
+  yearlyEnergyDcKwh: number;
+  roofSegmentSummaries: {
+    pitchDegrees: number;
+    azimuthDegrees: number;
+    panelsCount: number;
+    yearlyEnergyDcKwh: number;
+    segmentIndex: number;
+  }[];
+}
+
 interface ApiResponse {
   name: string;
   center: { latitude: number; longitude: number };
@@ -105,3 +133,4 @@ async function handleFormSubmit(event: Event) {
 }
 
 document.getElementById('solar-form')!.addEventListener('submit', handleFormSubmit);
+
